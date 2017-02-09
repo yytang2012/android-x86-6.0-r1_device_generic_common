@@ -114,6 +114,16 @@ service tablet-mode /system/bin/tablet-mode
     disabled
     oneshot
 
+service zygote /system/bin/app_process -Xzygote /system/bin --zygote --start-system-server
+    class main
+    socket zygote stream 660 root system
+    socket svmp_sensors stream 666 root net_admin
+    onrestart write /sys/android_power/request_state wake
+    onrestart write /sys/power/state on
+    onrestart restart media
+    onrestart restart netd
+    writepid /dev/cpuset/foreground/tasks
+
 on property:init.svc.wpa_supplicant=stopped
     stop dhcpcd
 

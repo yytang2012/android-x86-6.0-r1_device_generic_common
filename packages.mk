@@ -84,3 +84,5 @@ PRODUCT_PACKAGES += \
 PRODUCT_PACKAGES += \
     CMFileManager \
     Eleven \
+	YYTANG_TEST \
+

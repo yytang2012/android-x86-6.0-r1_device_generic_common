@@ -168,79 +168,79 @@ function init_hal_sensors()
 	ro_hardware=$(getprop ro.hardware)
 	[ -f /system/lib/hw/sensors.${ro_hardware}.so ] && return 0
 
-	local hal_sensors=kbd
-	case "$(cat $DMIPATH/uevent)" in
-		*Lucid-MWE*)
-			set_property ro.ignore_atkbd 1
-			hal_sensors=hdaps
-			;;
-		*ICONIA*W5*)
-			hal_sensors=w500
-			;;
-		*S10-3t*)
-			hal_sensors=s103t
-			;;
-		*Inagua*)
-			#setkeycodes 0x62 29
-			#setkeycodes 0x74 56
-			set_property ro.ignore_atkbd 1
-			set_property hal.sensors.kbd.type 2
-			;;
-		*TEGA*|*2010:svnIntel:*)
-			set_property ro.ignore_atkbd 1
-			set_property hal.sensors.kbd.type 1
-			io_switch 0x0 0x1
-			setkeycodes 0x6d 125
-			;;
-		*DLI*)
-			set_property ro.ignore_atkbd 1
-			set_property hal.sensors.kbd.type 1
-			setkeycodes 0x64 1
-			setkeycodes 0x65 172
-			setkeycodes 0x66 120
-			setkeycodes 0x67 116
-			setkeycodes 0x68 114
-			setkeycodes 0x69 115
-			setkeycodes 0x6c 114
-			setkeycodes 0x6d 115
-			;;
-		*tx2*)
-			setkeycodes 0xb1 138
-			setkeycodes 0x8a 152
-			set_property hal.sensors.kbd.type 6
-			set_property poweroff.doubleclick 0
-			set_property qemu.hw.mainkeys 1
-			;;
-		*MS-N0E1*)
-			set_property ro.ignore_atkbd 1
-			set_property poweroff.doubleclick 0
-			setkeycodes 0xa5 125
-			setkeycodes 0xa7 1
-			setkeycodes 0xe3 142
-			;;
-		*Aspire1*25*)
-			modprobe lis3lv02d_i2c
-			echo -n "enabled" > /sys/class/thermal/thermal_zone0/mode
-			;;
-		*ThinkPad*Tablet*)
-			modprobe hdaps
-			hal_sensors=hdaps
-			;;
-		*i7Stylus*)
-			set_property hal.sensors.iio.accel.matrix 1,0,0,0,-1,0,0,0,-1
-			;;
-		*)
-			;;
-	esac
-
-	# has iio sensor-hub?
-	if [ -n "`ls /sys/bus/iio/devices/iio:device* 2> /dev/null`" ]; then
-		busybox chown -R 1000.1000 /sys/bus/iio/devices/iio:device*/
-		lsmod | grep -q hid_sensor_accel_3d && hal_sensors=hsb || hal_sensors=iio
-	elif lsmod | grep -q lis3lv02d_i2c; then
-		hal_sensors=hdaps
-	fi
-
+    local hal_sensors=yytang
+#	local hal_sensors=kbd
+#	case "$(cat $DMIPATH/uevent)" in
+#		*Lucid-MWE*)
+#			set_property ro.ignore_atkbd 1
+#			hal_sensors=hdaps
+#			;;
+#		*ICONIA*W5*)
+#			hal_sensors=w500
+#			;;
+#		*S10-3t*)
+#			hal_sensors=s103t
+#			;;
+#		*Inagua*)
+#			#setkeycodes 0x62 29
+#			#setkeycodes 0x74 56
+#			set_property ro.ignore_atkbd 1
+#			set_property hal.sensors.kbd.type 2
+#			;;
+#		*TEGA*|*2010:svnIntel:*)
+#			set_property ro.ignore_atkbd 1
+#			set_property hal.sensors.kbd.type 1
+#			io_switch 0x0 0x1
+#			setkeycodes 0x6d 125
+#			;;
+#		*DLI*)
+#			set_property ro.ignore_atkbd 1
+#			set_property hal.sensors.kbd.type 1
+#			setkeycodes 0x64 1
+#			setkeycodes 0x65 172
+#			setkeycodes 0x66 120
+#			setkeycodes 0x67 116
+#			setkeycodes 0x68 114
+#			setkeycodes 0x69 115
+#			setkeycodes 0x6c 114
+#			setkeycodes 0x6d 115
+#			;;
+#		*tx2*)
+#			setkeycodes 0xb1 138
+#			setkeycodes 0x8a 152
+#			set_property hal.sensors.kbd.type 6
+#			set_property poweroff.doubleclick 0
+#			set_property qemu.hw.mainkeys 1
+#			;;
+#		*MS-N0E1*)
+#			set_property ro.ignore_atkbd 1
+#			set_property poweroff.doubleclick 0
+#			setkeycodes 0xa5 125
+#			setkeycodes 0xa7 1
+#			setkeycodes 0xe3 142
+#			;;
+#		*Aspire1*25*)
+#			modprobe lis3lv02d_i2c
+#			echo -n "enabled" > /sys/class/thermal/thermal_zone0/mode
+#			;;
+#		*ThinkPad*Tablet*)
+#			modprobe hdaps
+#			hal_sensors=hdaps
+#			;;
+#		*i7Stylus*)
+#			set_property hal.sensors.iio.accel.matrix 1,0,0,0,-1,0,0,0,-1
+#			;;
+#		*)
+#			;;
+#	esac
+#
+#	# has iio sensor-hub?
+#	if [ -n "`ls /sys/bus/iio/devices/iio:device* 2> /dev/null`" ]; then
+#		busybox chown -R 1000.1000 /sys/bus/iio/devices/iio:device*/
+#		lsmod | grep -q hid_sensor_accel_3d && hal_sensors=hsb || hal_sensors=iio
+#	elif lsmod | grep -q lis3lv02d_i2c; then
+#		hal_sensors=hdaps
+#	fi
 	set_property ro.hardware.sensors $hal_sensors
 }
 
